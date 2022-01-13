@@ -7,7 +7,7 @@ It opens when a List Command button is clicked, and closes using either Panel's 
 
 It may be used to replace Dialog component, ensuring the User Interface is consistent with that of SharePoint Online.
 
-![picture of the extension in action](assets/panel.gif)
+![picture of the extension in action](./assets/panel.gif)
 
 ## Compatibility
 

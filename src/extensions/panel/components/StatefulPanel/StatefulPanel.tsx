@@ -9,17 +9,17 @@ import { IStatefulPanelProps } from "./IStatefulPanelProps";
 
 export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>){
     const IframePanelStyles: Partial<IPanelStyles> = { root: { top: props.panelTop } };
-    const [isOpen, setisOpen] = useBoolean(false);
+    const [isOpen, setIsOpen] = useBoolean(false);
 
     React.useEffect(() => {
         if (props.shouldOpen && !isOpen ) { 
-            setisOpen.setTrue();
+            setIsOpen.setTrue();
             props.shouldOpen = false;
         }
     }, [props.shouldOpen]);
     
     const _onPanelClosed = () => {
-        setisOpen.setFalse();
+        setIsOpen.setFalse();
         if (props.onDismiss) { 
             props.onDismiss();
         }

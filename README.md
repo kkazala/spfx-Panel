@@ -7,9 +7,7 @@ It opens when a List Command button is clicked, and closes using either Panel's 
 
 It may be used to replace Dialog component, ensuring the User Interface is consistent with that of SharePoint Online.
 
-
-[picture of the solution in action, if possible]
-
+![picture of the extension in action](assets/panel.gif)
 
 ## Compatibility
 
@@ -36,13 +34,13 @@ SPFx 1.13 does not support local workbench. To test this solution you must have 
 
 Solution|Author(s)
 --------|---------
-folder name | Kinga Kazala
+spfx-panel | Kinga Kazala
 
 ## Version history
 
 Version|Date|Comments
 -------|----|--------
-1.0|January 29, 2021|Initial release
+1.0|January 13, 2022|Initial release
 
 ## Disclaimer
 
@@ -60,15 +58,18 @@ Version|Date|Comments
   - **gulp serve --nobrowser**
   - debug
 
+  See [Debugging SPFx 1.13+ solutions](https://dev.to/kkazala/debugging-spfx-113-solutions-11cd) on creating debug configurations.
+
 ## Features
 
-Opening and closing Panel is a no-brainer as long as it is controled by a higher component.
+Opening and closing Panel is a no-brainer as long as it is controled by a parent component.
 In the case of ListView Command Set, controlling Panel state requires slightly more effort.
 
 This extension illustrates the following concepts:
 
 - Panel component with (optionally, recommended) Error Boundary
-- Logging using  @pnp/logging Logger
+- Configurable logging using  @pnp/logging Logger
+- Example component using Panel, with a Toggle control to optionally refresh the page when the panel is closed
 
 ### React Error Boundary
 
@@ -82,12 +83,27 @@ Logging is implemented using [@pnp/logging](https://pnp.github.io/pnpjs/logging)
 
 Errors returned by [@pnp/sp](https://pnp.github.io/pnpjs/sp/#pnpsp) commands are handled using `Logger.error(e)`, which parses and logs the error message. If the error message should be displayed in the UI, use the [handleError](src\common\errorhandler.ts) function  implemented based on [Reading the Response](https://pnp.github.io/pnpjs/concepts/error-handling/#reading-the-response) example.
 
+## Deploy
+
+In case you are not using the elements.xml file for deployment, you may add the custom action using `Add-PnPCustomAction`
+
+```powershell
+Add-PnPCustomAction -Title "Panel" -Name "panl" -Location "ClientSideExtension.ListViewCommandSet.CommandBar" -ClientSideComponentId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSideComponentProperties "{""sampleTextOne"":""Travel guidelines"", ""sampleTextTwo"":""Trip report"", ""logLevel"":""3""}" -RegistrationId 100 -RegistrationType List -Scope Web
+```
+
+Updating the [logLevel](https://pnp.github.io/pnpjs/logging/#log-levels) in an already deployed solution is done with:
+
+```powershell
+$ca=Get-PnPCustomAction -Scope Web -Identity "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+$ca.ClientSideComponentProperties="{""sampleTextOne"":""Travel guidelines"", ""sampleTextTwo"":""Trip report"", ""logLevel"":""1""}"
+$ca.Update()
+```
+
 ## References
 
 - [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
 - [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
-- [SPFx Debug Configuration](https://marketplace.visualstudio.com/items?itemName=eliostruyf.spfx-debug) - Visual Studio Code extension to add the required configuration for debugging SPFx solutions
-- [PnP/PnPjs Getting Started](https://pnp.github.io/pnpjs/getting-started/)
-- [PnP/PnPjs Error Handling](https://pnp.github.io/pnpjs/concepts/error-handling/)
-- [Error Boundaries](https://reactjs.org/docs/error-boundaries.html) in React 16, and [react-error-boundary](https://www.npmjs.com/package/react-error-boundary) component
+- [Debugging SPFx 1.13+ solutions](https://dev.to/kkazala/debugging-spfx-113-solutions-11cd)
+- [PnP Error Handling](https://pnp.github.io/pnpjs/concepts/error-handling/)
+- [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) in React 16, and [react-error-boundary](https://www.npmjs.com/package/react-error-boundary) component
 - [I Made a Tool to Generate Images Using Office UI Fabric Icons](https://joshmccarty.com/made-tool-generate-images-using-office-ui-fabric-icons/) to generate CommandSet icons

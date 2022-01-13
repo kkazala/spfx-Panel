@@ -1,3 +1,5 @@
+.vcode
+
 # Logs
 logs
 *.log
@@ -12,7 +14,7 @@ lib
 release
 solution
 temp
-
+*.sppkg
 
 # Coverage directory used by tools like istanbul
 coverage

@@ -62,8 +62,8 @@ Version|Date|Comments
 
 ## Features
 
-Opening and closing Panel is a no-brainer as long as it is controled by a parent component.
-In the case of ListView Command Set, controlling Panel state requires slightly more effort.
+Opening and closing Panel controls is a no-brainer as long as it is controlled by a parent component.
+In the case of a ListView Command Set, this requires slightly more effort.
 
 This extension illustrates the following concepts:
 

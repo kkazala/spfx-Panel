@@ -1,4 +1,4 @@
-# spfx-panel
+# Panel for ListView Command Set extensions
 
 ## Summary
 

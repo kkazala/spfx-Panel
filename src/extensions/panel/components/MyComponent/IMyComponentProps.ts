@@ -5,4 +5,5 @@ export interface IMyComponentProps {
     selectedRows: readonly RowAccessor[];
     context: ListViewCommandSetContext;
     panelConfig: IStatefulPanelProps;
+    onRefresh?: any;
 }

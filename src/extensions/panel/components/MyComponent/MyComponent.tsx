@@ -9,8 +9,7 @@ export default function MyComponent(props: IMyComponentProps) {
 
     const _onPanelClosed = () => {
         if (refreshPage) {
-            //Reloads the entire page since there isn't currently a way to just reload the list view
-            location.reload(); 
+            props.onRefresh();
         }
     };
     

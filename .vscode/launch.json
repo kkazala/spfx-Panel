@@ -6,7 +6,7 @@
       "type": "msedge",
       "request": "launch",
       "version": "dev",
-      "url": "https://enter-your-SharePoint-tenant.sharepoint.com/sites/enter-your-SharePoint-site/Lists/enter-your-SharePoint-list?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"sampleTextOne\":\"Travel guidelines\",\"sampleTextTwo\":\"Trip report\", \"logLevel\":\"1\"}}}",
+      "url": "https://enter-your-SharePoint-site/Lists/enter-your-SharePoint-list/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"sampleTextOne\":\"Travel guidelines\",\"sampleTextTwo\":\"Trip report\", \"logLevel\":\"1\"}}}",
       "webRoot": "",
       "sourceMaps": true,
       "sourceMapPathOverrides": {

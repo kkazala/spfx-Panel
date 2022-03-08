@@ -1,7 +1,7 @@
 import { override } from '@microsoft/decorators';
+import { loadStyles } from '@microsoft/load-themed-styles';
 import {
-  BaseListViewCommandSet,
-  Command, IListViewCommandSetExecuteEventParameters, IListViewCommandSetListViewUpdatedParameters
+  BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
 import {
   ConsoleListener, Logger
@@ -47,18 +47,21 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
   @override
   public onInit(): Promise<void> {
     sp.setup(this.context);
+    loadStyles('panel');
     this._setLogger();
     this.panelTop = document.querySelector("#SuiteNavWrapper").clientHeight;
     this.panelPlaceHolder = document.body.appendChild(document.createElement("div"));
+
+    this.context.listView.listViewStateChangedEvent.add(this, this.onListViewUpdatedv2);
     return Promise.resolve();
   }
 
-  @override
-  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
+  public onListViewUpdatedv2(args: ListViewStateChangedEventArgs): void{
     const compareTwoCommand: Command = this.tryGetCommand('COMMAND_2');
-    if (compareTwoCommand) {
-      // This command should be hidden unless oneor more rows are selected.
-      compareTwoCommand.visible = event.selectedRows.length >= 1;
+    if (compareTwoCommand) { 
+      console.log(this.context.listView.selectedRows.length);
+      
+      compareTwoCommand.disabled = this.context.listView.selectedRows.length == 0;
     }
   }
 
@@ -67,6 +70,7 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
     
     switch (event.itemId) {
       case 'COMMAND_1':
+      this.raiseOnChange();
         this._showPanel({
           shouldOpen:true,
           title: this.properties.sampleTextOne,
@@ -82,6 +86,7 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
           },
           selectedRows: event.selectedRows,
           context: this.context,
+          onRefresh: this.raiseOnChange()
         });
         break;
       default:

@@ -1,4 +1,5 @@
 import { useBoolean } from '@fluentui/react-hooks';
+import { loadStyles } from '@microsoft/load-themed-styles';
 import {
     Logger, LogLevel
 } from "@pnp/logging";
@@ -10,7 +11,9 @@ import { IStatefulPanelProps } from "./IStatefulPanelProps";
 export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>){
     const IframePanelStyles: Partial<IPanelStyles> = { root: { top: props.panelTop } };
     const [isOpen, setIsOpen] = useBoolean(false);
-
+    React.useEffect(() => { 
+        loadStyles('panel');
+    }, []);
     React.useEffect(() => {
         if (props.shouldOpen && !isOpen ) { 
             setIsOpen.setTrue();
@@ -33,6 +36,7 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
     };
 
     return <Panel
+        className='od-Panel'
         headerText={props.title}
         isOpen={isOpen}
         type={PanelType.medium}

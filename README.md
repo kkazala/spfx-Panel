@@ -12,13 +12,22 @@ It may be used to replace Dialog component, ensuring the User Interface is consi
 ## Compatibility
 
 ![Compatible with SharePoint Online](https://img.shields.io/badge/SharePoint%20Online-Compatible-green.svg)
-[![version](https://img.shields.io/badge/SPFx-1.13.1-green)](https://docs.microsoft.com/sharepoint/dev/spfx/sharepoint-framework-overview)  ![version](https://img.shields.io/badge/Node.js-14.15.0-green)
+[![version](https://img.shields.io/badge/SPFx-1.14.0-green)](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/release-1.14)  ![version](https://img.shields.io/badge/Node.js-14.15.0-green)
 ![Hosted Workbench Compatible](https://img.shields.io/badge/Hosted%20Workbench-Compatible-green.svg)
 
 ![Does not work with SharePoint 2019](https://img.shields.io/badge/SharePoint%20Server%202019-Incompatible-red.svg "SharePoint Server 2019 requires SPFx 1.4.1 or lower")
-![Does not work with SharePoint 2016 (Feature Pack 2)](https://img.shields.io/badge/SharePoint%20Server%202016%20(Feature%20Pack%202)-Incompatible-red.svg "SharePoint Server 2016 Feature Pack 2 requires SPFx 1.1")
+![Does not work with SharePoint 2016 (Feature Pack 2)](https://img.shields.io/badge/SharePoint%20Server%202016%20(Feature%20Pack%202)-Incompatible-red.svg "SharePoint Server 2016 Feature Pack 2 requires SPFx 1.1") [![version](https://img.shields.io/badge/SPFx%201.13.1-Incompatible-red)](https://docs.microsoft.com/sharepoint/dev/spfx/sharepoint-framework-overview)
 ![Local Workbench Incompatible](https://img.shields.io/badge/Local%20Workbench-Incompatible-red.svg)
 
+### Backwards compatibility
+
+This code is using a number of capabilities introduced in [SPFx 1.14](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/release-1.14#list-view-command-set-updates):
+
+- List View State Changed Event
+- List Command Set Command Disabled Property
+- BaseListViewCommandSet.raiseOnChange
+
+and is therefore incompatible with SPFx 1.13.x versions. See [here](https://github.com/kkazala/spfx-Panel/tree/e3634b5cc1995d52ec4829382a5b21d0b6e35153) for a SPFx 1.13.1 version.
 ## Applies to
 
 - [SharePoint Framework](https://aka.ms/spfx)
@@ -40,6 +49,7 @@ spfx-panel | Kinga Kazala
 
 Version|Date|Comments
 -------|----|--------
+1.1|March 08, 2022|Upgrade to SPFx 1.14
 1.0|January 13, 2022|Initial release
 
 ## Disclaimer
@@ -88,7 +98,7 @@ Errors returned by [@pnp/sp](https://pnp.github.io/pnpjs/sp/#pnpsp) commands are
 In case you are not using the elements.xml file for deployment, you may add the custom action using `Add-PnPCustomAction`
 
 ```powershell
-Add-PnPCustomAction -Title "Panel" -Name "panl" -Location "ClientSideExtension.ListViewCommandSet.CommandBar" -ClientSideComponentId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSideComponentProperties "{""sampleTextOne"":""Travel guidelines"", ""sampleTextTwo"":""Trip report"", ""logLevel"":""3""}" -RegistrationId 100 -RegistrationType List -Scope Web
+Add-PnPCustomAction -Title "Panel" -Name "panel" -Location "ClientSideExtension.ListViewCommandSet.CommandBar" -ClientSideComponentId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSideComponentProperties "{""sampleTextOne"":""Travel guidelines"", ""sampleTextTwo"":""Trip report"", ""logLevel"":""3""}" -RegistrationId 100 -RegistrationType List -Scope Web
 ```
 
 Updating the [logLevel](https://pnp.github.io/pnpjs/logging/#log-levels) in an already deployed solution is done with:

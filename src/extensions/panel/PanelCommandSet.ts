@@ -126,7 +126,6 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
     
     switch (event.itemId) {
       case 'COMMAND_1':
-      this.raiseOnChange();
         this._showPanel({
           shouldOpen:true,
           title: this.properties.sampleTextOne,

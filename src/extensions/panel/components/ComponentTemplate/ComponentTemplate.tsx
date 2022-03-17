@@ -1,4 +1,4 @@
-import { MessageBar, MessageBarType, PrimaryButton, Toggle } from '@fluentui/react';
+import { MessageBar, MessageBarType, PrimaryButton } from '@fluentui/react';
 import { useBoolean } from '@fluentui/react-hooks';
 import {
     FunctionListener,
@@ -10,12 +10,12 @@ import { spfi, SPFx } from "@pnp/sp";
 import "@pnp/sp/items";
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
-import { head } from 'lodash';
 import * as React from "react";
 import StatefulPanel from "../StatefulPanel/StatefulPanel";
-import { IMyComponentProps } from "./IMyComponentProps";
+import { IComponentTemplateProps } from './IComponentTemplateProps';
 
-export default function MyComponent(props: IMyComponentProps) {
+
+export default function ComponentTemplate(props: IComponentTemplateProps) {
     const [refreshPage, setRefreshPage] = useBoolean(false);
     const [formDisabled, { setTrue: setFormDisabled, setFalse:setFormEnabled }] = useBoolean(false);
     const [isSubmitted, setIsSubmitted] = React.useState<boolean>(null);
@@ -28,18 +28,9 @@ export default function MyComponent(props: IMyComponentProps) {
 
     React.useEffect(() => {
         Logger.subscribe(funcListener);
-        Logger.write("MyComponent useEffect[]");
-
-        const selectedRow = head(props.selectedRows);
-
-        setIsSubmitted(selectedRow.getValueByName("Submitted") == "Yes" ? true : false);
-        setItemID(selectedRow.getValueByName("ID"));
-        setListGuid(props.context.listView.list.guid);
-        
     }, []);
     
     const funcListener = new (FunctionListener as any)((entry: ILogEntry) => {
-
         switch (entry.level) {
             case LogLevel.Error:
                 setStatusTxt(entry.message);
@@ -52,44 +43,28 @@ export default function MyComponent(props: IMyComponentProps) {
         }
     });
     
-    const updateListItem = async() => { 
+    const someFunction = async() => { 
 
         try {
-
             const sp = spfi().using(SPFx(props.context));
-            const items: any[] = await sp.web.lists.getById(listGuid).items.top(1).filter(`ID eq '${itemId}'`)();
-
-            if (items.length > 0) {
-                const updatedItem = await sp.web.lists.getById(listGuid).items.getById(items[0].Id).update({
-                    Submitted: "yes"//isSubmitted,
-                });
-                return true;
-            }
-            else
-                return false;
+            
+            return true;
             
         } catch (error) {
             Logger.error(error);
         }
     }
     
-    const _onToggleChange = (ev: React.MouseEvent<HTMLElement>, checked?: boolean) => { 
-        setIsSubmitted(checked);
-        setRefreshPage.setTrue();
-    }
-
     const _onFormSubmitted = async() => { 
-        Logger.write("MyComponent - form submitted");
         
         setFormDisabled();
-        const result = await updateListItem();
+        const result = await someFunction();
         setFormEnabled();
-        Logger.write(`result && refreshPage: ${result && refreshPage}`);
 
         if (result && refreshPage) {
             setStatusTxt("OK");
             setStatusType(MessageBarType.success);
-            props.onCompleted();
+            props.onChange();
         }
     };
 
@@ -107,15 +82,7 @@ export default function MyComponent(props: IMyComponentProps) {
         {statusTxt &&
             <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => _handleStatusMsgChange(null, null)}>{statusTxt}</MessageBar>
         }
-        <Toggle
-            label="Trip report submitted:"
-            inlineLabel
-            onChange={_onToggleChange}
-            defaultChecked={isSubmitted}
-            onText="Yes"
-            offText="No"
-            disabled={formDisabled}
-        />
+ 
         <PrimaryButton text="OK" onClick={_onFormSubmitted} allowDisabledFocus disabled={formDisabled}  />
 
     </StatefulPanel>;

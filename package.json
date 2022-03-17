@@ -14,6 +14,7 @@
     "@microsoft/decorators": "1.14.0",
     "@microsoft/load-themed-styles": "^1.10.242",
     "@microsoft/sp-core-library": "1.14.0",
+    "@pnp/core": "^3.1.0",
     "@pnp/logging": "~3.0.3",
     "@pnp/queryable": "~3.0.3",
     "@pnp/sp": "~3.0.3",

@@ -1,9 +1,9 @@
 import { RowAccessor } from "@microsoft/sp-listview-extensibility";
 import { IStatefulPanelProps } from "../StatefulPanel/IStatefulPanelProps";
 
-export interface IMyComponentProps { 
+export interface IComponentTemplateProps { 
     selectedRows: readonly RowAccessor[];
     context: any;
     panelConfig: IStatefulPanelProps;
-    onCompleted?: () => void;  
+    onChange?: () => void;  
 }

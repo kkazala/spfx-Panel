@@ -1,5 +1,4 @@
 import { override } from '@microsoft/decorators';
-import { loadStyles } from '@microsoft/load-themed-styles';
 import {
   BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
@@ -74,8 +73,6 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
     this._setLogger();
     Logger.write("onInit ");
 
-    loadStyles('panel');
-
     this.panelTop = document.querySelector("#SuiteNavWrapper").clientHeight;
     this.panelPlaceHolder = document.body.appendChild(document.createElement("div"));
 
@@ -144,9 +141,8 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
             title: this.properties.sampleTextTwo
           },
           context: this.context,
-         
           selectedRows: event.selectedRows,
-          onChange: this._refreshList
+          onCompleted: this._refreshList
           
         });
         break;

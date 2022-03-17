@@ -1,4 +1,4 @@
-.vcode
+.vscode
 
 # Logs
 logs
@@ -33,3 +33,4 @@ obj
 
 # Styles Generated Code
 *.scss.ts
+

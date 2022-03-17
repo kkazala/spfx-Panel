@@ -10,20 +10,23 @@ import { IStatefulPanelProps } from "./IStatefulPanelProps";
 
 export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>){
     const IframePanelStyles: Partial<IPanelStyles> = { root: { top: props.panelTop } };
-    const [isOpen, setIsOpen] = useBoolean(false);
+    const [isOpen, { setTrue: setPanelOpen, setFalse: setPanelClosed }] = useBoolean(false);
+
     React.useEffect(() => { 
         loadStyles('panel');
     }, []);
+
     React.useEffect(() => {
         if (props.shouldOpen && !isOpen ) { 
-            setIsOpen.setTrue();
-            props.shouldOpen = false;
+            setPanelOpen();
         }
     }, [props.shouldOpen]);
     
     const _onPanelClosed = () => {
-        setIsOpen.setFalse();
-        if (props.onDismiss) { 
+        props.shouldOpen = false;
+        setPanelClosed();
+
+        if (props.onDismiss !== undefined) { 
             props.onDismiss();
         }
     };
@@ -42,6 +45,7 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
         type={PanelType.medium}
         isLightDismiss={false}
         styles={IframePanelStyles}
+        // key={ props.uniqueKey}
         onDismiss={_onPanelClosed}>
         {/* Ensure there are children to render, otherwise ErrorBoundary throws error */}
         {props.children && 

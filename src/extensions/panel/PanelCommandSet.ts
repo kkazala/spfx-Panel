@@ -3,10 +3,7 @@ import { loadStyles } from '@microsoft/load-themed-styles';
 import {
   BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
-import {
-  ConsoleListener, Logger
-} from "@pnp/logging";
-import { sp } from "@pnp/sp";
+import { ConsoleListener, Logger } from '@pnp/logging';
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import { IMyComponentProps } from './components/MyComponent/IMyComponentProps';
@@ -27,7 +24,21 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
   private panelTop: number;
 
   private _showComponent = (props: IMyComponentProps): void => { 
-    ReactDOM.render(React.createElement(MyComponent, props), this.panelPlaceHolder);
+    //using item's ID as a key will ensure the form is re-rendered when selection is changed
+    //BUT if Panel for the Item has been opened (rendered), and
+    //   - panel is closed
+    //   - sb changed item properties (another browser)
+    //   - wait for list to refresh and show the new property
+    //   - open Panel: old value becasue panel is not re-rendered
+    // const ChangeToken = props.selectedRows[0].getValueByName("ID"); 
+    
+    const ChangeToken = Date.now(); //timestamp in milliseconds
+    ReactDOM.render(React.createElement(MyComponent, { ...props, key: ChangeToken }), this.panelPlaceHolder);
+
+    //about react components with key: 
+    //  https://dev.to/francodalessio/understanding-the-importance-of-the-key-prop-in-react-3ag7
+    //  https://kentcdodds.com/blog/understanding-reacts-key-prop
+    
   }
 
   private _showPanel = (props: IStatefulPanelProps): void => { 
@@ -35,34 +46,82 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
   }
 
   private _setLogger = () => {
-    Logger.subscribe(new ConsoleListener());
+    Logger.subscribe(new (ConsoleListener as any)(LOG_SOURCE));
     if (this.properties.logLevel && this.properties.logLevel in [0, 1, 2, 3, 99]) {
       Logger.activeLogLevel = this.properties.logLevel;
     }
-    Logger.write(`${LOG_SOURCE} Initialized PanelCommandSet`);  
-    Logger.write(`${LOG_SOURCE} Activated Initialized with properties:`);  
-    Logger.write(`${LOG_SOURCE} ${JSON.stringify(this.properties, undefined, 2)}`);
+    Logger.write(`Initialized PanelCommandSet`);  
+    Logger.write(`Activated Initialized with properties:`);  
+    Logger.writeJSON(this.properties);
+  }
+
+  // set all commands: visible = false, because
+  // there's an issue detecting list context during onInit, see https://github.com/SharePoint/sp-dev-docs/issues/7795 
+  private _setCommandsVisible = () => {
+
+    const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
+    if (compareOneCommand) {
+      compareOneCommand.visible = false;
+    }
+    const compareTwoCommand: Command = this.tryGetCommand('COMMAND_2');
+    if (compareTwoCommand) {
+      compareTwoCommand.visible = false;
+    }
   }
 
   @override
   public onInit(): Promise<void> {
-    sp.setup(this.context);
-    loadStyles('panel');
     this._setLogger();
+    Logger.write("onInit ");
+
+    loadStyles('panel');
+
     this.panelTop = document.querySelector("#SuiteNavWrapper").clientHeight;
     this.panelPlaceHolder = document.body.appendChild(document.createElement("div"));
 
     this.context.listView.listViewStateChangedEvent.add(this, this.onListViewUpdatedv2);
+
+    this._setCommandsVisible();
+
     return Promise.resolve();
   }
 
+  // Triggered when row(s) un/selected
   public onListViewUpdatedv2(args: ListViewStateChangedEventArgs): void{
-    const compareTwoCommand: Command = this.tryGetCommand('COMMAND_2');
-    if (compareTwoCommand) { 
-      console.log(this.context.listView.selectedRows.length);
-      
-      compareTwoCommand.disabled = this.context.listView.selectedRows.length == 0;
+    console.timeEnd("raiseOnChange")
+
+    Logger.write("onListViewUpdatedv2");
+
+    const isCorrectList = (this.context.listView.list.title == "Travel requests") ? true : false;
+    const itemSelected = this.context.listView.selectedRows && this.context.listView.selectedRows.length == 1;
+    
+    let raiseOnChange: boolean = false;
+    
+    const compareOneCommand: Command = this.tryGetCommand('COMMAND_1');
+    if (compareOneCommand && (compareOneCommand.visible != isCorrectList )) {
+      compareOneCommand.visible = isCorrectList;
+      raiseOnChange = true;
     }
+    
+    const compareTwoCommand: Command = this.tryGetCommand('COMMAND_2');
+    if (compareTwoCommand && (compareTwoCommand.visible!= (isCorrectList && itemSelected))) {
+      compareTwoCommand.visible = isCorrectList && itemSelected;
+      raiseOnChange = true;
+    }
+
+    // NOTE: use it carefully, frequent calls can lead to low performance of the list
+    // https://github.com/SharePoint/sp-dev-docs/discussions/7375#discussioncomment-2053604
+    if (raiseOnChange) {
+      this.raiseOnChange();
+    }
+  }
+
+  private _refreshList = (): void => { 
+    Logger.write(`Refreshing list view`);  
+
+    console.time("raiseOnChange");
+    this.raiseOnChange();
+    // console.timeEnd("raiseOnChange") is invoked in onListViewUpdatedv2
   }
 
   @override
@@ -82,11 +141,13 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
           panelConfig: {
             panelTop:this.panelTop,
             shouldOpen:true,
-            title: this.properties.sampleTextTwo,
+            title: this.properties.sampleTextTwo
           },
-          selectedRows: event.selectedRows,
           context: this.context,
-          onRefresh: this.raiseOnChange()
+         
+          selectedRows: event.selectedRows,
+          onChange: this._refreshList
+          
         });
         break;
       default:

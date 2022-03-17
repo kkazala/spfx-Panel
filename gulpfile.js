@@ -12,5 +12,9 @@ build.rig.getTasks = function () {
 
   return result;
 };
+// ********* disable tslint *******
+// https://github.com/pnp/pnpjs/issues/1636
+build.tslintCmd.enabled = false;
+// ********* disable tslint *******
 
 build.initialize(require('gulp'));

@@ -7,7 +7,7 @@ It opens when a List Command button is clicked, and closes using either Panel's 
 
 It may be used to replace Dialog component, ensuring the User Interface is consistent with that of SharePoint Online.
 
-![picture of the extension in action](https://github.com/kkazala/spfx-Panel/blob/main/assets/Panel.gif)
+![picture of the extension in action](https://github.com/kkazala/spfx-Panel/blob/main/assets/PanelSpfx1.14.gif)
 
 ## Compatibility
 
@@ -15,9 +15,9 @@ It may be used to replace Dialog component, ensuring the User Interface is consi
 [![version](https://img.shields.io/badge/SPFx-1.14.0-green)](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/release-1.14)  ![version](https://img.shields.io/badge/Node.js-14.15.0-green)
 ![Hosted Workbench Compatible](https://img.shields.io/badge/Hosted%20Workbench-Compatible-green.svg)
 
-![](https://img.shields.io/badge/pnp-V3-green) 
-![](https://img.shields.io/badge/TypeScript-4.x-green)
-![](https://img.shields.io/badge/%40microsoft%2Frush--stack--compiler-4.2-green)
+![pnp V3](https://img.shields.io/badge/pnp-V3-green)
+![TypeScript-4.x](https://img.shields.io/badge/TypeScript-4.x-green)
+![rush--stack--compiler-4.2](https://img.shields.io/badge/%40microsoft%2Frush--stack--compiler-4.2-green)
 
 ![Does not work with SharePoint 2019](https://img.shields.io/badge/SharePoint%20Server%202019-Incompatible-red.svg "SharePoint Server 2019 requires SPFx 1.4.1 or lower")
 ![Does not work with SharePoint 2016 (Feature Pack 2)](https://img.shields.io/badge/SharePoint%20Server%202016%20(Feature%20Pack%202)-Incompatible-red.svg "SharePoint Server 2016 Feature Pack 2 requires SPFx 1.1") [![version](https://img.shields.io/badge/SPFx%201.13.1-Incompatible-red)](https://docs.microsoft.com/sharepoint/dev/spfx/sharepoint-framework-overview)
@@ -53,7 +53,7 @@ spfx-panel | Kinga Kazala
 
 Version|Date|Comments
 -------|----|--------
-1.1|March 08, 2022|Upgrade to SPFx 1.14
+1.1|March 28, 2022|Upgrade to SPFx 1.14, Update item using pnp V3
 1.0|January 13, 2022|Initial release
 
 ## Disclaimer

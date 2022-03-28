@@ -3,7 +3,7 @@
   "solution": {
     "name": "spfx-panel-client-side-solution",
     "id": "f9f3dfc5-a3e5-421b-8a03-1a631efd2897",
-    "version": "1.0.0.0",
+    "version": "1.1.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {

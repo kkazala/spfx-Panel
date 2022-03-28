@@ -24,20 +24,6 @@ export default function MyComponent(props: IMyComponentProps) {
 
     const [statusTxt, setStatusTxt] = React.useState<string>(null);
     const [statusType, setStatusType] = React.useState<MessageBarType>(null);
-
-
-    React.useEffect(() => {
-        Logger.subscribe(funcListener);
-        Logger.write("MyComponent useEffect[]");
-
-        const selectedRow = head(props.selectedRows);
-
-        setIsSubmitted(selectedRow.getValueByName("Submitted") == "Yes" ? true : false);
-        setItemID(selectedRow.getValueByName("ID"));
-        setListGuid(props.context.listView.list.guid);
-        
-    }, []);
-    
     const funcListener = new (FunctionListener as any)((entry: ILogEntry) => {
 
         switch (entry.level) {
@@ -51,72 +37,83 @@ export default function MyComponent(props: IMyComponentProps) {
                 break;
         }
     });
+
+    React.useEffect(() => {
+        Logger.subscribe(funcListener);
+
+        const selectedRow = head(props.selectedRows);
+
+        setIsSubmitted(selectedRow.getValueByName("Submitted") == "Yes" ? true : false);
+        setItemID(selectedRow.getValueByName("ID"));
+        setListGuid(props.context.listView.list.guid);
+        
+    }, []);
+
     
-    const updateListItem = async() => { 
+    async function updateListItem(): Promise<boolean> {
 
         try {
-
             const sp = spfi().using(SPFx(props.context));
             const items: any[] = await sp.web.lists.getById(listGuid).items.top(1).filter(`ID eq '${itemId}'`)();
 
             if (items.length > 0) {
                 const updatedItem = await sp.web.lists.getById(listGuid).items.getById(items[0].Id).update({
-                    Submitted: "yes"//isSubmitted,
+                    Submitted: isSubmitted,
+                    // Submitted: "yes" // USE IT TO THROW ERROR,
                 });
                 return true;
             }
             else
                 return false;
-            
+
         } catch (error) {
             Logger.error(error);
         }
     }
     
-    const _onToggleChange = (ev: React.MouseEvent<HTMLElement>, checked?: boolean) => { 
+    function onToggleChange(_ev: React.MouseEvent<HTMLElement>, checked?: boolean): void {
         setIsSubmitted(checked);
         setRefreshPage.setTrue();
     }
 
-    const _onFormSubmitted = async() => { 
-        Logger.write("MyComponent - form submitted");
-        
+    async function onFormSubmitted(): Promise<void> {
+
         setFormDisabled();
-        const result = await updateListItem();
-        setFormEnabled();
-        Logger.write(`result && refreshPage: ${result && refreshPage}`);
+        const result: boolean = await updateListItem();
+        // setFormEnabled();
 
-        if (result && refreshPage) {
-            setStatusTxt("OK");
+        console.log(result);
+        if (result) {
+            setStatusTxt("Page will refresh automatically after you close this panel.");
             setStatusType(MessageBarType.success);
-            props.onCompleted();
         }
-    };
+    }
 
-    function _handleStatusMsgChange(message: string, messageBarType: MessageBarType): void {
-        setStatusTxt(message);
-        setStatusType(messageBarType);
+    function onPanelDismissed(): void {
+        if (refreshPage && props.panelConfig.onDismiss != undefined) {
+            props.panelConfig.onDismiss();
+        }
     }
     
     return <StatefulPanel
         title={props.panelConfig.title}
         panelTop={props.panelConfig.panelTop}
         shouldOpen={props.panelConfig.shouldOpen}
-        onDismiss={props.panelConfig.onDismiss}
+        onDismiss={onPanelDismissed}
     >
-        {statusTxt &&
-            <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => _handleStatusMsgChange(null, null)}>{statusTxt}</MessageBar>
+        {statusTxt && refreshPage &&
+            <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => setStatusTxt(null) }>{statusTxt}</MessageBar>
         }
         <Toggle
             label="Trip report submitted:"
             inlineLabel
-            onChange={_onToggleChange}
+            onChange={onToggleChange}
             defaultChecked={isSubmitted}
             onText="Yes"
             offText="No"
             disabled={formDisabled}
         />
-        <PrimaryButton text="OK" onClick={_onFormSubmitted} allowDisabledFocus disabled={formDisabled}  />
+        <PrimaryButton text="OK" onClick={onFormSubmitted} allowDisabledFocus disabled={formDisabled}  />
 
     </StatefulPanel>;
 }

@@ -5,5 +5,4 @@ export interface IMyComponentProps {
     selectedRows: readonly RowAccessor[];
     context: any;
     panelConfig: IStatefulPanelProps;
-    onCompleted?: () => void;  
 }

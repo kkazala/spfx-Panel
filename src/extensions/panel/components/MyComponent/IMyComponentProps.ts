@@ -1,8 +1,10 @@
 import { RowAccessor } from "@microsoft/sp-listview-extensibility";
+import { SPFI } from "@pnp/sp";
 import { IStatefulPanelProps } from "../StatefulPanel/IStatefulPanelProps";
 
-export interface IMyComponentProps { 
+export interface IMyComponentProps {
     selectedRows: readonly RowAccessor[];
-    context: any;
+    spfiContext: SPFI;
+    listName: string;
     panelConfig: IStatefulPanelProps;
 }

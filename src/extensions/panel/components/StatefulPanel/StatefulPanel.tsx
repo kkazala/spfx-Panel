@@ -1,14 +1,16 @@
 import { IPanelStyles, MessageBar, MessageBarType, Panel, PanelType } from "@fluentui/react";
 import { useBoolean } from '@fluentui/react-hooks';
+import { withAITracking } from "@microsoft/applicationinsights-react-js";
 import { loadStyles } from '@microsoft/load-themed-styles';
 import {
     Logger, LogLevel
 } from "@pnp/logging";
 import * as React from "react";
 import { ErrorBoundary } from 'react-error-boundary';
+import { AppInsightsLogListener } from "../../../utils/AppInsightsLogListener";
 import { IStatefulPanelProps } from "./IStatefulPanelProps";
 
-export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>): JSX.Element {
+function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>): JSX.Element {
     const IframePanelStyles: Partial<IPanelStyles> = { root: { top: props.panelTop } };
     const [isOpen, { setTrue: setPanelOpen, setFalse: setPanelClosed }] = useBoolean(false);
 
@@ -56,4 +58,4 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
         </Panel>;
 }
 
-
+export default withAITracking(AppInsightsLogListener.ReactPlugin, StatefulPanel )

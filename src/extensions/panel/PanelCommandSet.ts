@@ -6,6 +6,7 @@ import { ConsoleListener, Logger } from '@pnp/logging';
 import { SPFI, spfi, SPFx } from '@pnp/sp';
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
+import { AppInsightsLogListener } from '../utils/AppInsightsLogListener';
 import { IMyComponentProps } from './components/MyComponent/IMyComponentProps';
 import MyComponent from './components/MyComponent/MyComponent';
 import { IStatefulPanelProps } from './components/StatefulPanel/IStatefulPanelProps';
@@ -15,6 +16,7 @@ export interface IPanelCommandSetProperties {
   sampleTextOne: string;
   sampleTextTwo: string;
   logLevel?: number;
+  appInsightsConnectionString:string;
 }
 interface IProcessConfigResult{
   visible: boolean;
@@ -25,11 +27,13 @@ interface IProcessConfigResult{
 const LOG_SOURCE: string = 'PanelCommandSet';
 
 export default class PanelCommandSet extends BaseListViewCommandSet<IPanelCommandSetProperties> {
+  //#region variables
   private panelPlaceHolder: HTMLDivElement = null;
   private panelTop: number;
 	private panelId: string;
   private compId: string;
   private spfiContext: SPFI;
+  //#endregion
 
   private get _isListRegistered():boolean{
       return (this.context.listView.list.title === "Travel requests") ? true : false;
@@ -41,6 +45,10 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
     const _setLogger = (): void => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Logger.subscribe(new (ConsoleListener as any)());
+      Logger.subscribe(new AppInsightsLogListener({
+          connectionString: this.properties.appInsightsConnectionString,
+          version:this.manifest.version
+        }));
 
       if (
         this.properties.logLevel &&

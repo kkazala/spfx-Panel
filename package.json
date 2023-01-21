@@ -1,6 +1,6 @@
 {
   "name": "spfx-panel",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "engines": {
     "node": ">=16.13.0 <17.0.0"
@@ -23,10 +23,9 @@
     "@pnp/queryable": "^3.10.0",
     "@pnp/core": "^3.10.0",
     "@pnp/spfx-controls-react": "^3.10.0",
-    "@microsoft/sp-lodash-subset":"1.16.1",
     "lodash": "^4.17.21",
-    "react-dom": "17.0.0",
-    "react": "17.0.0",
+    "react-dom": "~17.0.1",
+    "react": "~17.0.1",
     "react-error-boundary": "^3.1.4",
     "@microsoft/applicationinsights-web": "~2.8.9",
     "@microsoft/applicationinsights-react-js": "~3.4.0",
@@ -43,8 +42,8 @@
     "eslint-plugin-react-hooks": "4.3.0",
     "@typescript-eslint/parser": "~5.33.1",
     "@types/lodash": "~4.14.184",
-    "@types/react-dom": "17.0.17",
-    "@types/react": "17.0.0",
+    "@types/react-dom": "~17.0.17",
+    "@types/react": "~17.0.45",
     "@types/webpack-env": "1.15.2",
     "ajv": "6.12.5",
     "gulp": "~4.0.2",

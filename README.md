@@ -37,7 +37,9 @@ It may be used to replace Dialog component, ensuring the User Interface is consi
 ## Prerequisites
 
 [SPFx 1.13+](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/release-1.13#deprecations-and-removed-items-in-this-release) does not support local workbench. To test this solution you must have a SharePoint site.
-
+| SPFx | Node.js (LTS)| NPM| TypeScript| React|
+|-|-|-|-|-|
+|1.16.1| v16.13+| v5, v6, v7, v8| v4.5| v17.0.1|
 ## Solution
 
 Solution|Author(s)
@@ -117,3 +119,4 @@ $ca.Update()
 - [PnP Error Handling](https://pnp.github.io/pnpjs/concepts/error-handling/)
 - [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) in React 16, and [react-error-boundary](https://www.npmjs.com/package/react-error-boundary) component
 - [I Made a Tool to Generate Images Using Office UI Fabric Icons](https://joshmccarty.com/made-tool-generate-images-using-office-ui-fabric-icons/) to generate CommandSet icons
+

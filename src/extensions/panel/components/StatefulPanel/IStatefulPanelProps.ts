@@ -1,3 +1,5 @@
+import { ReactPlugin } from "@microsoft/applicationinsights-react-js";
+
 
 export interface IStatefulPanelProps {
     title: string;
@@ -5,4 +7,5 @@ export interface IStatefulPanelProps {
     panelTop: number;
     onDismiss?: () => void;
     uniqueKey?: string;
+    reactPlugin: ReactPlugin;
 }

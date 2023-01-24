@@ -101,6 +101,7 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
         panelTop={props.panelConfig.panelTop}
         shouldOpen={props.panelConfig.shouldOpen}
         onDismiss={onPanelDismissed}
+        reactPlugin={props.panelConfig.reactPlugin}
     >
         {statusTxt && refreshPage &&
             <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => setStatusTxt(null) }>{statusTxt}</MessageBar>

@@ -1,13 +1,12 @@
 import { IPanelStyles, MessageBar, MessageBarType, Panel, PanelType } from "@fluentui/react";
 import { useBoolean } from '@fluentui/react-hooks';
-import { withAITracking } from "@microsoft/applicationinsights-react-js";
+import { AppInsightsContext, AppInsightsErrorBoundary, withAITracking } from "@microsoft/applicationinsights-react-js";
 import { loadStyles } from '@microsoft/load-themed-styles';
 import {
     Logger, LogLevel
 } from "@pnp/logging";
 import * as React from "react";
-import { ErrorBoundary } from 'react-error-boundary';
-import { AppInsightsLogListener } from "../../../utils/AppInsightsLogListener";
+import { reactPlugin } from '../../../utils/AppInsights';
 import { IStatefulPanelProps } from "./IStatefulPanelProps";
 
 function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>): JSX.Element {
@@ -40,22 +39,32 @@ function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>): JSX
         Logger.write(info.componentStack, LogLevel.Error);
     };
 
-    return <Panel
-        className='od-Panel'
-        headerText={props.title}
-        isOpen={isOpen}
-        type={PanelType.medium}
-        isLightDismiss={false}
-        styles={IframePanelStyles}
-        // key={ props.uniqueKey}
-        onDismiss={_onPanelClosed}>
-        {/* Ensure there are children to render, otherwise ErrorBoundary throws error */}
-        {props.children &&
-            <ErrorBoundary FallbackComponent={_errorFallback} onError={_errorHandler}>
-                {props.children}
-            </ErrorBoundary>
-        }
-        </Panel>;
+    const App = (props) => {
+        return (
+            <AppInsightsErrorBoundary onError={_errorFallback} appInsights={reactPlugin}>
+                <>
+                    {props.children}
+                </>
+            </AppInsightsErrorBoundary>
+        );
+    };
+    return <AppInsightsContext.Provider value={reactPlugin}>
+            <Panel
+            className='od-Panel'
+            headerText={props.title}
+            isOpen={isOpen}
+            type={PanelType.medium}
+            isLightDismiss={false}
+            styles={IframePanelStyles}
+            // key={ props.uniqueKey}
+            onDismiss={_onPanelClosed}>
+            {/* Ensure there are children to render, otherwise ErrorBoundary throws error */}
+            {props.children &&
+                <></>
+
+            }
+            </Panel>
+    </AppInsightsContext.Provider>;
 }
 
-export default withAITracking(AppInsightsLogListener.ReactPlugin, StatefulPanel )
+export default withAITracking(reactPlugin, StatefulPanel)

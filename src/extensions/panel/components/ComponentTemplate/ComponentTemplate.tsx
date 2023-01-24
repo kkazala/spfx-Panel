@@ -25,11 +25,6 @@ export default function ComponentTemplate(props: IComponentTemplateProps) {
     const [statusTxt, setStatusTxt] = React.useState<string>(null);
     const [statusType, setStatusType] = React.useState<MessageBarType>(null);
 
-
-    React.useEffect(() => {
-        Logger.subscribe(funcListener);
-    }, []);
-    
     const funcListener = new (FunctionListener as any)((entry: ILogEntry) => {
         switch (entry.level) {
             case LogLevel.Error:
@@ -42,21 +37,25 @@ export default function ComponentTemplate(props: IComponentTemplateProps) {
                 break;
         }
     });
-    
-    const someFunction = async() => { 
+
+    React.useEffect(() => {
+        Logger.subscribe(funcListener);
+    }, []);
+
+    const someFunction = async() => {
 
         try {
             const sp = spfi().using(SPFx(props.context));
-            
+
             return true;
-            
+
         } catch (error) {
             Logger.error(error);
         }
     }
-    
-    const _onFormSubmitted = async() => { 
-        
+
+    const _onFormSubmitted = async() => {
+
         setFormDisabled();
         const result = await someFunction();
         setFormEnabled();
@@ -72,17 +71,18 @@ export default function ComponentTemplate(props: IComponentTemplateProps) {
         setStatusTxt(message);
         setStatusType(messageBarType);
     }
-    
+
     return <StatefulPanel
         title={props.panelConfig.title}
         panelTop={props.panelConfig.panelTop}
         shouldOpen={props.panelConfig.shouldOpen}
         onDismiss={props.panelConfig.onDismiss}
+        reactPlugin={props.panelConfig.reactPlugin}
     >
         {statusTxt &&
             <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => _handleStatusMsgChange(null, null)}>{statusTxt}</MessageBar>
         }
- 
+
         <PrimaryButton text="OK" onClick={_onFormSubmitted} allowDisabledFocus disabled={formDisabled}  />
 
     </StatefulPanel>;

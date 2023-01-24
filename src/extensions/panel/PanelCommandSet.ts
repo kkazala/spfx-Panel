@@ -1,3 +1,4 @@
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { override } from '@microsoft/decorators';
 import {
   BaseListViewCommandSet, Command, IListViewCommandSetExecuteEventParameters, ListViewStateChangedEventArgs
@@ -6,6 +7,7 @@ import { ConsoleListener, Logger } from '@pnp/logging';
 import { SPFI, spfi, SPFx } from '@pnp/sp';
 import * as React from "react";
 import * as ReactDOM from 'react-dom';
+import { AppInsights, reactPlugin } from '../utils/AppInsights';
 import { AppInsightsLogListener } from '../utils/AppInsightsLogListener';
 import { IMyComponentProps } from './components/MyComponent/IMyComponentProps';
 import MyComponent from './components/MyComponent/MyComponent';
@@ -16,7 +18,7 @@ export interface IPanelCommandSetProperties {
   sampleTextOne: string;
   sampleTextTwo: string;
   logLevel?: number;
-  appInsightsConnectionString:string;
+  appInsightsConnectionString?:string;
 }
 interface IProcessConfigResult{
   visible: boolean;
@@ -42,13 +44,14 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
   @override
   public onInit(): Promise<void> {
 
-    const _setLogger = (): void => {
+    const _setLogger = (appInsights?:ApplicationInsights): void => {
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       Logger.subscribe(new (ConsoleListener as any)());
-      Logger.subscribe(new AppInsightsLogListener({
-          connectionString: this.properties.appInsightsConnectionString,
-          version:this.manifest.version
-        }));
+      //Application Insights tracking
+      if (appInsights !== undefined){
+        Logger.subscribe(new AppInsightsLogListener(appInsights));
+      }
 
       if (
         this.properties.logLevel &&
@@ -92,7 +95,18 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
       return;
     }
 
-    _setLogger();
+    if (this.properties.appInsightsConnectionString){
+      const appInsights= new AppInsights({
+        connectionString: this.properties.appInsightsConnectionString,
+        version: this.manifest.version
+      })
+      appInsights.loadAppInsights();
+      _setLogger(appInsights);
+    }
+    else{
+      _setLogger();
+    }
+
     _setPanel();
     _setCommands();
     this.spfiContext = spfi().using(SPFx(this.context)); //https://github.com/pnp/pnpjs/issues/2304
@@ -157,6 +171,7 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
     const _showPanel = (props: IStatefulPanelProps): void => {
       this.compId = Date.now().toString();
       this.panelPlaceHolder.setAttribute('id', this.compId);
+
       ReactDOM.render(React.createElement(StatefulPanel, { ...props, key: this.compId }), this.panelPlaceHolder);
     }
 
@@ -164,13 +179,14 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
       Logger.write(`Refreshing list view`);
       location.reload();
     }
-    const a= this.context.listView.list.guid
+
     switch (event.itemId) {
       case 'COMMAND_1':
         _showPanel({
           shouldOpen:true,
           title: this.properties.sampleTextOne,
           panelTop:this.panelTop,
+          reactPlugin:reactPlugin
         });
         break;
       case 'COMMAND_2':
@@ -179,7 +195,9 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
             panelTop:this.panelTop,
             shouldOpen:true,
             title: this.properties.sampleTextTwo,
-            onDismiss: _refreshList
+            onDismiss: _refreshList,
+            reactPlugin: reactPlugin
+
           },
           spfiContext: this.spfiContext,
           listName: this.context.listView.list.title,

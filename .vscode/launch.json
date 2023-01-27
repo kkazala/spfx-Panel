@@ -2,11 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "ListViewCommandSet debug",
-      "type": "msedge",
+      "name": "ListViewCommandSet debug CHROME",
+      "type": "chrome",
       "request": "launch",
-      "version": "dev",
-      "url": "https://kingasws1e5.sharepoint.com/sites/LET-exams-LD1/Lists/Travel%20requests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"sampleTextOne\":\"Travel guidelines\",\"sampleTextTwo\":\"Trip report\", \"logLevel\":\"1\"}}}",
+      "url": "https://your-sharepoint-site/Lists/Travelrequests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"listName\":\"Travel Requests\",\"logLevel\":\"1\"}}}",
       "webRoot": "",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -15,26 +14,26 @@
         "webpack:///../../../../../src/*": "/src/*"
       },
       "runtimeArgs": [
-        "--remote-debugging-port=9222"
+        "--remote-debugging-port=9222",
+        "--profile-directory=debug-adeleV"        
       ]
     },
     {
-      "name": "Hosted workbench",
-      "type": "chrome",
-      "request": "launch",
-      "url": "https://enter-your-SharePoint-site/_layouts/workbench.aspx",
-      "webRoot": "${workspaceRoot}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        "webpack:///.././src/*": "${webRoot}/src/*",
-        "webpack:///../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../src/*": "${webRoot}/src/*",
-        "webpack:///../../../../../src/*": "${webRoot}/src/*"
-      },
-      "runtimeArgs": [
-        "--remote-debugging-port=9222",
-        "-incognito"
-      ]
+        "name": "ListViewCommandSet debug EDGE",
+        "type": "msedge",
+        "request": "launch",
+        "url": "https://your-sharepoint-site/sites/LET-exams-LD1/Lists/Travelrequests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"listName\":\"Travel Requests\",\"logLevel\":\"1\"}}}",
+        "webRoot": "",
+        "sourceMaps": true,
+        "sourceMapPathOverrides": {
+          "webpack:///../../../src/*": "/src/*",
+          "webpack:///../../../../src/*": "/src/*",
+          "webpack:///../../../../../src/*": "/src/*"
+        },
+        "runtimeArgs": [
+          "--remote-debugging-port=9222",
+          "--profile-directory=debug-adeleV"        
+        ]
     }
   ]
 }

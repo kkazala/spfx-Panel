@@ -1,4 +1,3 @@
-
 export interface IStatefulPanelProps {
     title: string;
     shouldOpen: boolean;

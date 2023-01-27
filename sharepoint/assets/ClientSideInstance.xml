@@ -4,6 +4,6 @@
         Title="Panel"
         Location="ClientSideExtension.ListViewCommandSet.CommandBar"
         ListTemplateId="100"
-        Properties="{&quot;sampleTextOne&quot;:&quot;One item is selected in the list.&quot;, &quot;sampleTextTwo&quot;:&quot;This command is always visible.&quot;}"
+        Properties="{&quot;listName&quot;:&quot;Travel Requests&quot;,&quot;logLevel&quot;:&quot;3&quot;}"
         ComponentId="03a2395f-4448-4d30-a540-6b22c79c255a" />
 </Elements>

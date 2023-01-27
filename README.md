@@ -38,6 +38,10 @@ It may be used to replace Dialog component, ensuring the User Interface is consi
 
 [SPFx 1.13+](https://learn.microsoft.com/en-us/sharepoint/dev/spfx/release-1.13#deprecations-and-removed-items-in-this-release) does not support local workbench. To test this solution you must have a SharePoint site.
 
+SPFx development environment compatibility:
+| SPFx | Node.js (LTS)| NPM| TypeScript| React|
+|-|-|-|-|-|
+|1.16.1| v16.13+| v5, v6, v7, v8| v4.5| v17.0.1|
 ## Solution
 
 Solution|Author(s)
@@ -48,7 +52,7 @@ spfx-panel | Kinga Kazala
 
 Version|Date|Comments
 -------|----|--------
-1.2|January 20, 2023 | Upgrade to SPFx 1.16 which requires Node.js v16|
+1.2|January 20, 2023 | Upgrade to SPFx 1.16 which requires Node.js v16. Application Insights support|
 1.1|March 28, 2022|Upgrade to SPFx 1.14, Update item using pnp V3
 1.0|January 13, 2022|Initial release
 
@@ -65,10 +69,10 @@ Version|Date|Comments
 - in the command-line run:
   - **nvm use 16.14.x** (the 16.x.x node version you have installed)
   - **npm install**
-  - **gulp serve --nobrowser**
+  - **gulp serve --nobrowser** (or **gulp serve --nobrowser --locale=de-de** to test German version)
   - debug
 
-  See [Debugging SPFx 1.13+ solutions](https://dev.to/kkazala/debugging-spfx-113-solutions-11cd) on creating debug configurations.
+See [Debugging SPFx 1.13+ solutions](https://dev.to/kkazala/debugging-spfx-113-solutions-11cd) on creating debug configurations.
 
 ## Features
 
@@ -77,9 +81,10 @@ In the case of a ListView Command Set, this requires slightly more effort.
 
 This extension illustrates the following concepts:
 
-- Panel component with (optionally, recommended) Error Boundary
-- Configurable logging using  @pnp/logging Logger
-- Example component using Panel, with a Toggle control to optionally refresh the page when the panel is closed
+- Panel component with an Error Boundary
+- Logging using  @pnp/logging Logger
+- page tracking and event tracking with Application Insights
+- Example component using Panel, with a Toggle control to refresh the page when the panel is closed
 
 ### React Error Boundary
 
@@ -93,19 +98,22 @@ Logging is implemented using [@pnp/logging](https://pnp.github.io/pnpjs/logging)
 
 Errors returned by [@pnp/sp](https://pnp.github.io/pnpjs/sp/#pnpsp) commands are handled using `Logger.error(e)`, which parses and logs the error message. If the error message should be displayed in the UI, use the [handleError](src\common\errorhandler.ts) function  implemented based on [Reading the Response](https://pnp.github.io/pnpjs/concepts/error-handling/#reading-the-response) example.
 
+### Application Insights
+This solution is using [Application Insights for webpages](https://learn.microsoft.com/en-us/azure/azure-monitor/app/javascript) and [react plug-in](https://learn.microsoft.com/en-us/azure/azure-monitor/app/javascript-react-plugin).
+
 ## Deploy
 
 In case you are not using the elements.xml file for deployment, you may add the custom action using `Add-PnPCustomAction`
 
 ```powershell
-Add-PnPCustomAction -Title "Panel" -Name "panel" -Location "ClientSideExtension.ListViewCommandSet.CommandBar" -ClientSideComponentId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSideComponentProperties "{""sampleTextOne"":""Travel guidelines"", ""sampleTextTwo"":""Trip report"", ""logLevel"":""3""}" -RegistrationId 100 -RegistrationType List -Scope Web
+Add-PnPCustomAction -Title "Panel" -Name "panel" -Location "ClientSideExtension.ListViewCommandSet.CommandBar" -ClientSideComponentId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSideComponentProperties "{""listName"":""Travel Requests"", ""logLevel"":""3""}" -RegistrationId 100 -RegistrationType List -Scope Web
 ```
 
 Updating the [logLevel](https://pnp.github.io/pnpjs/logging/#log-levels) in an already deployed solution is done with:
 
 ```powershell
 $ca=Get-PnPCustomAction -Scope Web -Identity "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-$ca.ClientSideComponentProperties="{""sampleTextOne"":""Travel guidelines"", ""sampleTextTwo"":""Trip report"", ""logLevel"":""1""}"
+$ca.ClientSideComponentProperties="{""listName"":""Travel Requests"", ""logLevel"":""1""}"
 $ca.Update()
 ```
 
@@ -117,3 +125,10 @@ $ca.Update()
 - [PnP Error Handling](https://pnp.github.io/pnpjs/concepts/error-handling/)
 - [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) in React 16, and [react-error-boundary](https://www.npmjs.com/package/react-error-boundary) component
 - [I Made a Tool to Generate Images Using Office UI Fabric Icons](https://joshmccarty.com/made-tool-generate-images-using-office-ui-fabric-icons/) to generate CommandSet icons
+
+### React 
+> It is [recommended](https://beta.reactjs.org/reference/react/PureComponent#migrating-from-a-purecomponent-class-component-to-a-function) to use function components instead of class components in the new code. 
+- [Understanding Functional Components vs. Class Components in React](https://www.twilio.com/blog/react-choose-functional-components)
+- [Components and Props](https://reactjs.org/docs/components-and-props.html)
+- [Understanding the importance of the key prop in React](https://dev.to/francodalessio/understanding-the-importance-of-the-key-prop-in-react-3ag7=)
+- [Understanding React's key prop](https://kentcdodds.com/blog/understanding-reacts-key-prop)

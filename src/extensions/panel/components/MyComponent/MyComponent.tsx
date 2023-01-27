@@ -11,11 +11,14 @@ import { IItems } from '@pnp/sp/items';
 import "@pnp/sp/lists";
 import "@pnp/sp/webs";
 import { head } from 'lodash';
+import * as strings from 'PanelCommandSetStrings';
 import * as React from "react";
+import { handleError } from '../../../utils/ErrorHandler';
 import StatefulPanel from "../StatefulPanel/StatefulPanel";
 import { IMyComponentProps } from "./IMyComponentProps";
 
 export default function MyComponent(props: IMyComponentProps): JSX.Element {
+    //#region const
     const [refreshPage, setRefreshPage] = useBoolean(false);
     const [formDisabled, setFormDisabled] = useBoolean(false);
     const [isSubmitted, setIsSubmitted] = React.useState<boolean>(null);
@@ -24,6 +27,8 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
 
     const [statusTxt, setStatusTxt] = React.useState<string>(null);
     const [statusType, setStatusType] = React.useState<MessageBarType>(null);
+    //#endregion
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const funcListener = new (FunctionListener as any)((entry: ILogEntry) => {
 
@@ -53,6 +58,7 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
 
     async function updateListItem(): Promise<boolean> {
 
+        let success:boolean=false;
         try {
             const items: IItems = await props.spfiContext.web.lists.getByTitle(listName).items.top(1).filter(`ID eq '${itemId}'`)();
 
@@ -62,13 +68,13 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
                     // Submitted: "yes" // USE IT TO THROW ERROR,
                 });
 
-                return true;
+                success= true;
             }
-            else
-                return false;
+            return success;
 
         } catch (error) {
-            Logger.error(error);
+            handleError(error);
+            return success;
         }
     }
 
@@ -81,11 +87,13 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
 
         setFormDisabled.setTrue();
         const result: boolean = await updateListItem();
-        // setFormEnabled();
+        if(props.onCompleted!== undefined){
+            props.onCompleted(result);
+        }
 
-        console.log(result);
-        if (result) {
-            setStatusTxt("Page will refresh automatically after you close this panel.");
+        //if form values changed and item succesfully updated
+        if (result && refreshPage ) {
+            setStatusTxt(strings.lblPageWillRefresh);
             setStatusType(MessageBarType.success);
         }
     }
@@ -96,25 +104,25 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
         }
     }
 
-    return <StatefulPanel
-        title={props.panelConfig.title}
-        panelTop={props.panelConfig.panelTop}
-        shouldOpen={props.panelConfig.shouldOpen}
-        onDismiss={onPanelDismissed}
-    >
-        {statusTxt && refreshPage &&
-            <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => setStatusTxt(null) }>{statusTxt}</MessageBar>
-        }
-        <Toggle
-            label="Trip report submitted:"
-            inlineLabel
-            onChange={onToggleChange}
-            defaultChecked={isSubmitted}
-            onText="Yes"
-            offText="No"
-            disabled={formDisabled}
-        />
-        <PrimaryButton text="OK" onClick={onFormSubmitted} allowDisabledFocus disabled={formDisabled}  />
-
-    </StatefulPanel>;
+    return (
+        <StatefulPanel
+            title={props.panelConfig.title}
+            panelTop={props.panelConfig.panelTop}
+            shouldOpen={props.panelConfig.shouldOpen}
+            onDismiss={onPanelDismissed}
+        >
+            {statusTxt && 
+                <MessageBar messageBarType={statusType} isMultiline={true} dismissButtonAriaLabel="x" onDismiss={() => setStatusTxt(null) }>{statusTxt}</MessageBar>
+            }
+            <Toggle
+                label={strings.lblConfirm}
+                inlineLabel
+                onChange={onToggleChange}
+                defaultChecked={isSubmitted}
+                onText={strings.lblYes}
+                offText={strings.lblNo}
+                disabled={formDisabled}
+            />
+            <PrimaryButton text={strings.btnSubmit} onClick={onFormSubmitted} allowDisabledFocus disabled={formDisabled}  />
+        </StatefulPanel>);
 }

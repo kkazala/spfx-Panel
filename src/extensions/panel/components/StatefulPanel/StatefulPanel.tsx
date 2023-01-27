@@ -1,12 +1,10 @@
 import { IPanelStyles, MessageBar, MessageBarType, Panel, PanelType } from "@fluentui/react";
 import { useBoolean } from '@fluentui/react-hooks';
 import { loadStyles } from '@microsoft/load-themed-styles';
-import {
-    Logger, LogLevel
-} from "@pnp/logging";
 import * as React from "react";
-import { ErrorBoundary } from 'react-error-boundary';
 import { IStatefulPanelProps } from "./IStatefulPanelProps";
+import { ErrorBoundary } from 'react-error-boundary';
+import { Logger, LogLevel } from "@pnp/logging";
 
 export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>): JSX.Element {
     const IframePanelStyles: Partial<IPanelStyles> = { root: { top: props.panelTop } };
@@ -37,8 +35,9 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
         Logger.error(error);
         Logger.write(info.componentStack, LogLevel.Error);
     };
-
-    return <Panel
+    
+    return (
+        <Panel
         className='od-Panel'
         headerText={props.title}
         isOpen={isOpen}
@@ -50,10 +49,9 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
         {/* Ensure there are children to render, otherwise ErrorBoundary throws error */}
         {props.children &&
             <ErrorBoundary FallbackComponent={_errorFallback} onError={_errorHandler}>
-                {props.children}
-            </ErrorBoundary>
+            {props.children}
+             </ErrorBoundary>
         }
-        </Panel>;
+        </Panel>
+    );
 }
-
-

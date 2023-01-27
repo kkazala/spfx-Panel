@@ -1,7 +1,7 @@
-﻿import { ReactPlugin, withAITracking } from "@microsoft/applicationinsights-react-js";
+﻿import { AnalyticsPlugin } from "@microsoft/applicationinsights-analytics-js";
+import { ReactPlugin } from "@microsoft/applicationinsights-react-js";
 import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 import { createBrowserHistory } from "history";
-import { ComponentType, memo } from "react";
 
 export interface IAppInsightsProps {
     connectionString: string;
@@ -9,29 +9,18 @@ export interface IAppInsightsProps {
 }
 const browserHistory = createBrowserHistory({});
 export const reactPlugin = new ReactPlugin();
-export class AppInsights extends ApplicationInsights {
-    constructor(props: IAppInsightsProps){
-        super({config:{
-            connectionString: props.connectionString,
-            maxBatchInterval: 0,
-            disableFetchTracking: false,  //Fetch requests aren't autocollected.
-            disableAjaxTracking: true,    //Ajax calls aren't autocollected.
+export function AppInsights(connString:string): AnalyticsPlugin{
+    const  ai = new ApplicationInsights({
+        config: {
+            connectionString: connString,
             extensions: [reactPlugin],
             extensionConfig: {
-                [reactPlugin.identifier]: { history: browserHistory }
+            [reactPlugin.identifier]: { history: browserHistory }
             }
-        }})
-        this.context.application.ver= props.version;
-      // this.setAuthenticatedUserContext
-
-    }
+        }
+    });
+    ai.loadAppInsights();
+    return ai.appInsights;
 }
 
-export function wrap<T extends ComponentType<unknown>>(
-    component: T,
-    componentName?: string,
-    className?: string
-): T {
-    return withAITracking(reactPlugin, memo(component), componentName, className) as T
-}
 

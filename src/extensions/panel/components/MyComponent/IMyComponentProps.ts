@@ -7,4 +7,5 @@ export interface IMyComponentProps {
     spfiContext: SPFI;
     listName: string;
     panelConfig: IStatefulPanelProps;
+    onCompleted?: (success:boolean) => void;
 }

@@ -1,11 +1,12 @@
 ﻿
-import { ApplicationInsights, SeverityLevel } from '@microsoft/applicationinsights-web';
+import { AnalyticsPlugin } from '@microsoft/applicationinsights-analytics-js';
+import { SeverityLevel } from '@microsoft/applicationinsights-web';
 import { ILogEntry, ILogListener, LogLevel } from "@pnp/logging";
 
 
 export class AppInsightsLogListener implements ILogListener {
-    private appInsights: ApplicationInsights;
-    constructor(appInsights: ApplicationInsights) {
+    private appInsights: AnalyticsPlugin;
+    constructor(appInsights: AnalyticsPlugin) {
         this.appInsights = appInsights;
     }
 

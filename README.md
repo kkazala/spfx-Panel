@@ -74,6 +74,7 @@ Version|Date|Comments
 
 See [Debugging SPFx 1.13+ solutions](https://dev.to/kkazala/debugging-spfx-113-solutions-11cd) on creating debug configurations.
 
+
 ## Features
 
 Opening and closing Panel controls is a no-brainer as long as it is controlled by a parent component.
@@ -125,6 +126,7 @@ $ca.Update()
 - [PnP Error Handling](https://pnp.github.io/pnpjs/concepts/error-handling/)
 - [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) in React 16, and [react-error-boundary](https://www.npmjs.com/package/react-error-boundary) component
 - [I Made a Tool to Generate Images Using Office UI Fabric Icons](https://joshmccarty.com/made-tool-generate-images-using-office-ui-fabric-icons/) to generate CommandSet icons
+- [Using custom certificates when debugging SPFx Solutions](https://www.blimped.nl/spfx-using-custom-certificates-when-debugging/)
 
 ### React 
 > It is [recommended](https://beta.reactjs.org/reference/react/PureComponent#migrating-from-a-purecomponent-class-component-to-a-function) to use function components instead of class components in the new code. 

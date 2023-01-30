@@ -1,4 +1,7 @@
-.vscode/launch.json
+.vscode
+
+#Cert
+*.pem
 
 # Logs
 logs

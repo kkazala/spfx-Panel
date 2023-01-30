@@ -1,5 +1,8 @@
 FROM node:16.18.1
 
+ENV NPM_CONFIG_PREFIX=/usr/app/.npm-global \
+  PATH=$PATH:/usr/app/.npm-global/bin
+  
 RUN npm i -g gulp-cli 
 
 VOLUME /usr/app/spfx

@@ -26,10 +26,14 @@
       "dom",
       "es2015.collection",
       "es2015.promise"
-    ]
+    ],
+    "paths": {
+      "react":["./node_modules/@types/react" ]
+    }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
-  ]
+  ],
+  
 }

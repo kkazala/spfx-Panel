@@ -73,7 +73,7 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
             return success;
 
         } catch (error) {
-            handleError(error);
+            await handleError(error);
             return success;
         }
     }

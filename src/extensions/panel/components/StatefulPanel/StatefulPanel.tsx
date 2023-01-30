@@ -3,8 +3,9 @@ import { useBoolean } from '@fluentui/react-hooks';
 import { loadStyles } from '@microsoft/load-themed-styles';
 import * as React from "react";
 import { IStatefulPanelProps } from "./IStatefulPanelProps";
-import { ErrorBoundary } from 'react-error-boundary';
 import { Logger, LogLevel } from "@pnp/logging";
+import { reactPlugin } from "../../../utils/AppInsights";
+import AppInsightsErrorBoundary from "../AppInsightsErrorBoundary/AppInsightsErrorBoundary";
 
 export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPanelProps>): JSX.Element {
     const IframePanelStyles: Partial<IPanelStyles> = { root: { top: props.panelTop } };
@@ -28,14 +29,12 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
             props.onDismiss();
         }
     };
-    const _errorFallback = (error): JSX.Element => {
+    const _errorFallback = (error:Error, info: { componentStack: string }): JSX.Element => {
+        Logger.error(error);
+
         return <MessageBar messageBarType={MessageBarType.error} isMultiline={true} dismissButtonAriaLabel="Close" >{error}</MessageBar>;
     };
-    const _errorHandler = (error: Error, info: { componentStack: string }):void => {
-        Logger.error(error);
-        Logger.write(info.componentStack, LogLevel.Error);
-    };
-    
+
     return (
         <Panel
         className='od-Panel'
@@ -48,9 +47,12 @@ export default function StatefulPanel(props: React.PropsWithChildren<IStatefulPa
         onDismiss={_onPanelClosed}>
         {/* Ensure there are children to render, otherwise ErrorBoundary throws error */}
         {props.children &&
-            <ErrorBoundary FallbackComponent={_errorFallback} onError={_errorHandler}>
-            {props.children}
-             </ErrorBoundary>
+        <AppInsightsErrorBoundary onError={_errorFallback} appInsights={reactPlugin}>
+            <>
+                {props.children}
+            </>
+        </AppInsightsErrorBoundary>
+        
         }
         </Panel>
     );

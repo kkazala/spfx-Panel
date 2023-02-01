@@ -109,6 +109,19 @@ Errors returned by [@pnp/sp](https://pnp.github.io/pnpjs/sp/#pnpsp) commands are
 This solution is using [Application Insights for webpages](https://learn.microsoft.com/en-us/azure/azure-monitor/app/javascript) and [React plug-in for Application Insights JavaScript SDK](https://learn.microsoft.com/en-us/azure/azure-monitor/app/javascript-react-plugin) to log errors and metrics to application insights.
 
 ## Deploy
+Install solution
+```powershell
+# -Scope accepted values: Tenant, Site
+$packageInSite = Add-PnPApp -Path "$sppkgPath" -Scope $appCatalogScope -Overwrite -Publish
+if ( $null -eq $packageInSite.InstalledVersion ) {
+    Write-Host "Installing app $($packageInSite.Id) ..."
+    Install-PnPApp -Identity $packageInSite.Id -Scope $appCatalogScope -Wait
+}
+elseif ($packageInSite.CanUpgrade -eq $true) {
+    Write-Host "Updating installed app $($packageInSite.Id) ..."
+    Update-PnPApp -Identity $packageInSite.Id -Scope $appCatalogScope
+}
+```
 
 In case you are not using the elements.xml file for deployment, you may add the custom action using `Add-PnPCustomAction`
 
@@ -116,7 +129,7 @@ In case you are not using the elements.xml file for deployment, you may add the 
 Add-PnPCustomAction -Title "Panel" -Name "panel" -Location "ClientSideExtension.ListViewCommandSet.CommandBar" -ClientSideComponentId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ClientSideComponentProperties "{""listName"":""Travel Requests"",""logLevel"":""3"",""appInsightsConnString"":""your-connection-string""}" -RegistrationId 100 -RegistrationType List -Scope Web
 ```
 
-Updating the [logLevel](https://pnp.github.io/pnpjs/logging/#log-levels) in an already deployed solution is done with:
+Updating the properties in an already deployed solution can be done with:
 
 ```powershell
 $ca=Get-PnPCustomAction -Scope Web -Identity "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -129,7 +142,9 @@ $ca.Update()
 - [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
 - [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
 - [Debugging SPFx 1.13+ solutions](https://dev.to/kkazala/debugging-spfx-113-solutions-11cd)
+- [Professional SPFx Solutions: Superb solution packages](https://pnp.github.io/blog/post/spfx-21-professional-solutions-superb-solution-packages/)
 - [PnP Error Handling](https://pnp.github.io/pnpjs/concepts/error-handling/)
+- [PnP log levels](https://pnp.github.io/pnpjs/logging/#log-levels)
 - [https://pnp.github.io/pnpjs/logging/#create-a-custom-listener](https://pnp.github.io/pnpjs/logging/#create-a-custom-listener)
 - [React plug-in for Application Insights JavaScript SDK](https://learn.microsoft.com/en-us/azure/azure-monitor/app/javascript-react-plugin)
 - [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html) in React 16, and [React error boundaries](https://learn.microsoft.com/en-us/azure/azure-monitor/app/javascript-react-plugin#react-error-boundaries)

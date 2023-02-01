@@ -1,9 +1,26 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "spfx-panel-client-side-solution",
+    "name": "SPFx Panel for Travel Requests",
     "id": "f9f3dfc5-a3e5-421b-8a03-1a631efd2897",
     "version": "1.1.0.0",
+    "supportedLocales": [
+      "en-us",
+      "de-de"
+    ],
+    "metadata": {
+      "shortDescription": {
+        "default": "React Panel with ApplicationInsights logs and metrics"
+      },
+      "longDescription": {
+        "default": "Presents creation of Panel using React functional component, and connection to Azure Application Insights using JavaScript SDK"
+      },
+      "categories": [
+        "Collaboration",
+        "Content management",
+        "Productivity"
+      ]
+    },
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {
@@ -11,12 +28,12 @@
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
-      "mpnId": ""
+      "mpnId": "Undefined-1.16.1"
     },
     "features": [
       {
-        "title": "Application Extension - Deployment of custom action.",
-        "description": "Deploys a custom action with ClientSideComponentId association",
+        "title": "Application Extension - Deployment of custom action for Travel Requests.",
+        "description": "Deploys a custom action, which provides a Panel ",
         "id": "fbfc8ff7-864b-4787-b520-3564303eca03",
         "version": "1.0.0.0",
         "assets": {

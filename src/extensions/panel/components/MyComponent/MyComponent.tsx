@@ -98,7 +98,7 @@ export default function MyComponent(props: IMyComponentProps): JSX.Element {
     } catch (error) {
       // Parse error message in case it's a HttpRequestError error
       // log using Logger
-      handleError(error);
+      await handleError(error);
       return success;
     }
   };

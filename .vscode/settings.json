@@ -11,7 +11,7 @@
   },
   "typescript.tsdk": ".\\node_modules\\typescript\\lib",
   "typescript.format.enable": true,
-  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "editor.defaultFormatter": null,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.insertSpaces": true

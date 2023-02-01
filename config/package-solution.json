@@ -4,23 +4,6 @@
     "name": "SPFx Panel for Travel Requests",
     "id": "f9f3dfc5-a3e5-421b-8a03-1a631efd2897",
     "version": "1.1.0.0",
-    "supportedLocales": [
-      "en-us",
-      "de-de"
-    ],
-    "metadata": {
-      "shortDescription": {
-        "default": "React Panel with ApplicationInsights logs and metrics"
-      },
-      "longDescription": {
-        "default": "Presents creation of Panel using React functional component, and connection to Azure Application Insights using JavaScript SDK"
-      },
-      "categories": [
-        "Collaboration",
-        "Content management",
-        "Productivity"
-      ]
-    },
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {

@@ -5,7 +5,7 @@
       "name": "ListViewCommandSet debug CHROME",
       "type": "chrome",
       "request": "launch",
-      "url": "https://your-sharepoint-site/Lists/Travelrequests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"listName\":\"Travel Requests\",\"logLevel\":\"1\"}}}",
+      "url": "https://kingasws1e5.sharepoint.com/sites/LET-exams-LD1/Lists/Travelrequests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"47ce2faa-e041-430f-908e-30ab3a69b0b5\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"listName\":\"Travel Requests\",\"logLevel\":\"1\"}}}",
       "webRoot": "",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -22,7 +22,7 @@
         "name": "ListViewCommandSet debug EDGE",
         "type": "msedge",
         "request": "launch",
-        "url": "https://your-sharepoint-site/sites/LET-exams-LD1/Lists/Travelrequests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"03a2395f-4448-4d30-a540-6b22c79c255a\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"listName\":\"Travel Requests\",\"logLevel\":\"1\"}}}",
+        "url": "https://kingasws1e5.sharepoint.com/sites/LET-exams-LD1/Lists/Travelrequests/AllItems.aspx?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"47ce2faa-e041-430f-908e-30ab3a69b0b5\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\",\"properties\":{\"listName\":\"Travel Requests\",\"logLevel\":\"1\"}}}",
         "webRoot": "",
         "sourceMaps": true,
         "sourceMapPathOverrides": {

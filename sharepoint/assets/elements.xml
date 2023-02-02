@@ -6,6 +6,6 @@
         RegistrationType="List"
         Location="ClientSideExtension.ListViewCommandSet.CommandBar"
         ClientSideComponentId="03a2395f-4448-4d30-a540-6b22c79c255a"
-        ClientSideComponentProperties="{&quot;listName&quot;:&quot;Travel Requests&quot;,&quot;logLevel&quot;:&quot;3&quot;}">
+        ClientSideComponentProperties="{&quot;listName&quot;:&quot;Travel Requests&quot;,&quot;logLevel&quot;:&quot;3&quot;,&quot;appInsightsConnString&quot;:&quot;your-connection-string&quot;}">
     </CustomAction>
 </Elements>

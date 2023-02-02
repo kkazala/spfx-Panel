@@ -1,16 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/command-set-extension-manifest.schema.json",
 
-  "id": "03a2395f-4448-4d30-a540-6b22c79c255a",
+  "id": "47ce2faa-e041-430f-908e-30ab3a69b0b5",
   "alias": "PanelCommandSet",
   "componentType": "Extension",
   "extensionType": "ListViewCommandSet",
-
   "version": "*",
   "manifestVersion": 2,
-
   "requiresCustomScript": false,
-
   "items": {
     "COMMAND_1": {
       "title": { "default": "Travel guidelines" },

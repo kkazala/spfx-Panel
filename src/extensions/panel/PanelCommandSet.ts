@@ -169,7 +169,8 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
 
 			ReactDOM.render(element, this.panelPlaceHolder);
 		};
-		const _refreshList = (): void => {
+
+		const _dismissPanel = (): void => {
 			Logger.write(strings.lblRefreshing);
 			location.reload();
 		};
@@ -184,7 +185,6 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
 		switch (event.itemId) {
 			case "COMMAND_1":
 				_showPanel({
-					shouldOpen: true,
 					title: strings.titleTravelGuidelines,
 					panelTop: this.panelTop,
 				});
@@ -193,9 +193,8 @@ export default class PanelCommandSet extends BaseListViewCommandSet<IPanelComman
 				_showComponent({
 					panelConfig: {
 						panelTop: this.panelTop,
-						shouldOpen: true,
 						title: strings.titleTravelReport,
-						onDismiss: _refreshList,
+						onDismiss: _dismissPanel,
 					},
 					spfiContext: this.spfiContext,
 					listName: this.context.listView.list.title,
